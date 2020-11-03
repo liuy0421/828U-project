@@ -25,6 +25,8 @@ from tensor_lda.tensor_lda import TensorLDA
 import numpy as np
 import pandas as pd
 import pickle
+import scipy.sparse as sparse
+
 
 file_path = "DATA/GSM3828672_Smartseq2_GBM_IDHwt_processed_TPM.tsv"
 df = pd.read_csv(file_path, sep='\t').transpose()
