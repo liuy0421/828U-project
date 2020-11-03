@@ -26,7 +26,7 @@ import numpy as np
 import pandas as pd
 import pickle
 
-file_path = "DATA/GSE131928_RAW/GSM3828672_Smartseq2_GBM_IDHwt_processed_TPM.tsv"
+file_path = "DATA/GSM3828672_Smartseq2_GBM_IDHwt_processed_TPM.tsv"
 df = pd.read_csv(file_path, sep='\t').transpose()
 
 expr_gene = []
