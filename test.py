@@ -50,7 +50,7 @@ print("Constructing sparse matrix...")
 t0=time()
 
 tf = sparse.csr_matrix(df.values[1:].astype(float))
-
+tf_feature_names = df.values[0]
 
 print("done in %0.3fs." % (time() - t0))
 
@@ -88,9 +88,12 @@ lda.fit(tf)
 print("done in %0.3fs." % (time() - t0))
 
 print("\nTopics in LDA model:")
-tf_feature_names = tf_vectorizer.get_feature_names()
-print_top_words(lda, df.values[1], n_top_words)
+print_top_words(lda, tf_feature_names, n_top_words)
 
-doc_topics = lda.transform(tf[0:2, :])
-print(doc_topics[0, :])
-print(data_samples[0])
+
+with open('lda_model.pkl', 'w') as f:  # Python 3: open(..., 'wb')
+    pickle.dump(lda, f)
+
+# Getting back the objects:
+# with open('objs.pkl') as f:  # Python 3: open(..., 'rb')
+#     obj0, obj1, obj2 = pickle.load(f)
