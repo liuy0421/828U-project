@@ -27,9 +27,15 @@ import pandas as pd
 import pickle
 import scipy.sparse as sparse
 
+print("Loading data...")
 
+t0=time()
 file_path = "DATA/GSM3828672_Smartseq2_GBM_IDHwt_processed_TPM.tsv"
 df = pd.read_csv(file_path, sep='\t').transpose()
+print("done in %0.3fs." % (time() - t0))
+
+print("Filtering genes...")
+t0=time()
 
 expr_gene = []
 for idx, col in df.iteritems():
@@ -38,8 +44,15 @@ for idx, col in df.iteritems():
         expr_gene.append(idx)
 
 df = df.iloc[:,expr_gene]
+print("done in %0.3fs." % (time() - t0))
+
+print("Constructing sparse matrix...")
+t0=time()
 
 tf = sparse.csr_matrix(df.values[1:].astype(float))
+
+
+print("done in %0.3fs." % (time() - t0))
 
 n_samples = tf.shape[0]
 n_features = tf.shape[1]
@@ -63,6 +76,10 @@ def print_top_words(model, feature_names, n_top_words):
 # to filter out useless terms early on: the posts are stripped of headers,
 # footers and quoted replies, and common English words, words occurring in
 # only one document or in at least 95% of the documents are removed.
+
+
+print("Doing tensor LDA...")
+t0=time()
 
 lda = TensorLDA(n_components=n_components, alpha0=.01)
 
