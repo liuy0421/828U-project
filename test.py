@@ -91,8 +91,8 @@ print("\nTopics in LDA model:")
 print_top_words(lda, tf_feature_names, n_top_words)
 
 
-with open('lda_model.pkl', 'w') as f:  # Python 3: open(..., 'wb')
-    pickle.dump(lda, f)
+with open('lda_model.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
+    pickle.dump(lda, f,-1)
 
 # Getting back the objects:
 # with open('objs.pkl') as f:  # Python 3: open(..., 'rb')
