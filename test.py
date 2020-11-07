@@ -19,6 +19,7 @@ from time import time
 
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.datasets import fetch_20newsgroups
+from sklearn.preprocessing import normalize
 
 from tensor_lda.tensor_lda import TensorLDA
 
@@ -30,27 +31,29 @@ import scipy.sparse as sparse
 print("Loading data...")
 
 t0=time()
-file_path = "DATA/GSM3828672_Smartseq2_GBM_IDHwt_processed_TPM.tsv"
+file_path = "../DATA/GSE131928_RAW/GSM3828672_Smartseq2_GBM_IDHwt_processed_TPM.tsv"
 df = pd.read_csv(file_path, sep='\t').transpose()
 print("done in %0.3fs." % (time() - t0))
 
 print("Filtering genes...")
 t0=time()
 
-expr_gene = []
-for idx, col in df.iteritems():
-    exp = (col !=0).sum()/23686
-    if exp > 0.1:
-        expr_gene.append(idx)
+# extract gene names and expression values
+gene_names = df.values[0]
+exp = df.values[1:]
 
-df = df.iloc[:,expr_gene]
+# Keep the top 2000 genes with the highest variance
+var = normalize(df.values[1:], norm="l1").var(axis = 0)
+ind = np.argpartition(var, -2000)[-2000:]
+
 print("done in %0.3fs." % (time() - t0))
 
 print("Constructing sparse matrix...")
 t0=time()
 
-tf = sparse.csr_matrix(df.values[1:].astype(float))
-tf_feature_names = df.values[0]
+tf = sparse.csr_matrix(exp[:,ind].astype(float))
+tf_feature_names = gene_names[ind]
+del(df,exp,gene_names,var,ind)
 
 print("done in %0.3fs." % (time() - t0))
 
