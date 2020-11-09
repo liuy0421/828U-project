@@ -40,11 +40,11 @@ t0=time()
 
 # extract gene names and expression values
 gene_names = df.values[0]
-exp = df.values[1:]
+exp = np.round(normalize(df.values[1:],axis=1,norm='max')*100)
 
 # Keep the top 2000 genes with the highest variance
-var = normalize(df.values[1:], norm="l1").var(axis = 0)
-ind = np.argpartition(var, -2000)[-2000:]
+var = exp.var(axis = 0)
+ind = np.argpartition(var, -1500)[-1500:]
 
 print("done in %0.3fs." % (time() - t0))
 
@@ -59,8 +59,8 @@ print("done in %0.3fs." % (time() - t0))
 
 n_samples = tf.shape[0]
 n_features = tf.shape[1]
-n_components = 6
-n_top_words = 20
+n_components = 4
+n_top_words = 30
 
 
 
